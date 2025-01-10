@@ -1,0 +1,40 @@
+version: '3'
+services:
+  db:
+    image: postgres:13.0-alpine
+    container_name: star_burger_db
+    volumes:
+      - db_data:/var/lib/postgresql/data/
+    env_file:
+      - /backend/star_burger/.env
+    ports:
+      - 5432:5432
+  
+  frontend:
+    container_name: star_burger_frontend
+    build:
+      context: ./frontend
+    volumes:
+      - staticfiles:/opt/star-burger/bundles
+    command: ./node_modules/.bin/parcel build bundles-src/index.js --dist-dir bundles --public-url="./"
+  
+  backend:
+    container_name: star_burger_backend
+    build:
+      context: ./backend
+    volumes:
+      - media:/opt/star-burger/media
+      - staticfiles:/opt/star-burger/static
+    env_file:
+      - /backend/star_burger/.env
+    ports:
+      - 127.0.0.1:8000:8000
+    command: gunicorn -w 3 -b 0.0.0.0:8000 star_burger.wsgi:application
+    depends_on:
+      - db
+      - frontend
+
+volumes:
+  db_data:
+  staticfiles:
+    

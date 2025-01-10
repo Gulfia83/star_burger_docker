@@ -1,3 +1,10 @@
+bundles/**
+node_modules/
+media/
+static/
+starburger_db.json
+.parcel-cache/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
