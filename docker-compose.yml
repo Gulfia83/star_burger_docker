@@ -6,7 +6,7 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data/
     env_file:
-      - /backend/star_burger/.env
+      - .env
     ports:
       - 5432:5432
   
@@ -15,26 +15,30 @@ services:
     build:
       context: ./frontend
     volumes:
-      - staticfiles:/opt/star_burger/bundles
-    command: ./node_modules/.bin/parcel build bundles-src/index.js --dist-dir bundles --public-url="./"
+      - ./frontend/bundles-src/:/frontend/bundles-src/
+      - ./bundles:/frontend/bundles
+    command: ./node_modules/.bin/parcel watch bundles-src/index.js --dist-dir bundles --public-url="./"
   
   backend:
     container_name: star_burger_backend
     build:
       context: ./backend
     volumes:
-      - media:/opt/star_burger/media
-      - staticfiles:/opt/star_burger/static
+      - ./backend:/star-burger
+      - ./static:/star-burger/static
+      - ./media:/star-burger/media
+      - ./bundles:/star-burger/bundles
     env_file:
-      - /backend/star_burger/.env
+      - .env
     ports:
-      - 127.0.0.1:8000:8000
-    command: gunicorn -w 3 -b 0.0.0.0:8000 star_burger.wsgi:application
+      - 8000:8000
+    command: python -m gunicorn -b 0.0.0.0:8000 star_burger.wsgi:application
     depends_on:
       - db
       - frontend
 
 volumes:
   db_data:
-  staticfiles:
+  media:
+  bundles:
     
