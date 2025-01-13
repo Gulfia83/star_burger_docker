@@ -103,9 +103,6 @@ DATABASES = {
     )
 }
 
-DATABASES['default']['OPTIONS'] = {
-    'options': '-c search_path=starburger_db_schema'
-}
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
