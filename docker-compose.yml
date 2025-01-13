@@ -15,8 +15,8 @@ services:
     build:
       context: ./frontend
     volumes:
-      - ./frontend/bundles-src/:/frontend/bundles-src/
-      - ./bundles:/frontend/bundles
+      - ./assets:/opt/star-burger/assets
+      - ./bundles:/opt/star-burger/bundles
     command: ./node_modules/.bin/parcel watch bundles-src/index.js --dist-dir bundles --public-url="./"
   
   backend:
@@ -24,10 +24,10 @@ services:
     build:
       context: ./backend
     volumes:
-      - ./backend:/star-burger
-      - ./static:/star-burger/static
-      - ./media:/star-burger/media
-      - ./bundles:/star-burger/bundles
+      - ./assets:/opt/star-burger/assets
+      - ./static:/opt/star-burger/static
+      - ./media:/opt/star-burger/media
+      - ./bundles:/opt/star-burger/bundles
     env_file:
       - .env
     ports:
